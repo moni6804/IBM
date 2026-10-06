@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ShiftWise AI – Smart shift scheduler</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <h1>ShiftWise AI</h1>
+      <p id="weekLabel">Ward 4 roster</p>
+    </div>
+    <div class="actions">
+      <span id="aiPill" class="pill" title=""></span>
+      <button id="btnAuto" class="btn primary">Auto-schedule week</button>
+      <button id="btnClear" class="btn">Clear week</button>
+      <button id="btnReset" class="btn ghost">Reset demo data</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="schedule" aria-label="Weekly schedule">
+      <div class="legend" aria-label="Legend">
+        <span><i class="dot morning"></i>Morning 06:00–14:00</span>
+        <span><i class="dot evening"></i>Evening 14:00–22:00</span>
+        <span><i class="dot night"></i>Night 22:00–06:00</span>
+        <span><i class="mark err">!</i>Breaks a rule</span>
+        <span><i class="mark warn">▲</i>Needs review</span>
+        <span><i class="swatch hatch"></i>Unavailable</span>
+        <span><i class="rk r-high">%</i>Predicted call-out risk</span>
+      </div>
+      <div class="gridwrap"><table id="grid" class="grid"></table></div>
+      <p class="hint">Click any cell to add or remove shifts. Rules are checked on every change.</p>
+    </section>
+
+    <aside class="side">
+      <section class="card">
+        <div class="card-head">
+          <h2>Rule check</h2>
+          <div id="counts" class="counts"></div>
+        </div>
+        <ul id="violations" class="violations"></ul>
+      </section>
+
+      <section class="card" id="mlCard">
+        <div class="card-head">
+          <h2>Call-out risk model</h2>
+          <button id="btnRetrain" class="btn small" title="Generate fresh training data, retrain and re-evaluate all models">Retrain</button>
+        </div>
+        <p class="note" id="mlSummary">Loading model…</p>
+        <div id="mlMetrics" class="metrics"></div>
+        <h3 class="sub">What drives call-outs</h3>
+        <ul id="mlImportance" class="imp"></ul>
+        <h3 class="sub">Model comparison (cross-validated AUC)</h3>
+        <ul id="mlCompare" class="cmp"></ul>
+        <h3 class="sub">Riskiest shifts this week</h3>
+        <ul id="mlTop" class="top"></ul>
+        <p class="note small">Trained on synthetic attendance data with assumed fatigue drivers. Replace it with your real HR attendance records before relying on the numbers.</p>
+      </section>
+
+      <section class="card">
+        <div class="card-head"><h2>Scheduling assistant</h2></div>
+        <div class="row">
+          <button id="btnExplain" class="btn">Explain problems</button>
+        </div>
+        <form id="askForm" class="ask">
+          <label class="sr" for="askInput">Ask about this schedule</label>
+          <input id="askInput" type="text" maxlength="500" placeholder="Who is closest to overtime?" autocomplete="off">
+          <button class="btn primary" type="submit">Ask</button>
+        </form>
+        <div id="aiOut" class="aiout" aria-live="polite"></div>
+      </section>
+    </aside>
+  </main>
+
+  <div id="popover" class="popover" role="dialog" aria-modal="false" hidden></div>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+data/state.json
+.pytest_cache/
+.DS_Store
+data/model.joblib
+data/test_model.joblib
